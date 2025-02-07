@@ -264,6 +264,8 @@
                         const [awayTeam, homeTeam] = superBowlEvent.name.split(' at ');
                         document.getElementById('homeTeam').textContent = homeTeam;
                         document.getElementById('awayTeam').textContent = awayTeam;
+                        localStorage.setItem('homeTeam', homeTeam);
+                        localStorage.setItem('awayTeam', awayTeam);
                         document.querySelectorAll('.team-info').forEach(el => el.style.display = 'block');
                         renderGrid();
                         document.getElementById('purchaseSquaresBtn').style.display = 'block';
@@ -395,6 +397,12 @@
         }
 
         function renderGrid() {
+            if(localStorage.getItem('homeTeam')) {
+                document.getElementById('homeTeam').textContent = localStorage.getItem('homeTeam');
+            }
+            if(localStorage.getItem('awayTeam')) {
+                document.getElementById('awayTeam').textContent = localStorage.getItem('awayTeam');
+            }
             const gridContainer = document.getElementById('gridContainer');
             if (localStorage.getItem('superBowlGrid')) {
                 gridContainer.innerHTML = localStorage.getItem('superBowlGrid');
