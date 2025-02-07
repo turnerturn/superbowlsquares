@@ -228,6 +228,8 @@
                         document.getElementById('awayTeam').textContent = awayTeam;
                         document.querySelectorAll('.team-info').forEach(el => el.style.display = 'block');
                         renderGrid();
+                        document.getElementById('purchaseSquaresBtn').style.display = 'block';
+                        document.getElementById('distributeSquaresButton').style.display = 'block';
                     } else {
                         alert('Super Bowl event not found for the current year.');
                     }
@@ -259,6 +261,9 @@
                 }
             });
             document.getElementById('available-squares-count').textContent = `Available Squares: ${100 - squares.length}`;
+            if (squares.length >= 100) {
+                document.getElementById('purchaseSquaresBtn').style.display = 'none';
+            }
             return squares;
         }
         // Function to initialize and render a new grid
@@ -301,7 +306,7 @@
             shuffleArray(squares);
             localStorage.setItem('squares', JSON.stringify(squares));
             let squareCount = 0;
-            for (let row = 2; row < 11; row++) {
+            for (let row = 2; row <= 11; row++) {
                 for (let col = 2; col < 12; col++) {
                   if(squareCount >= squares.length) {
                     continue;
@@ -310,6 +315,9 @@
                     document.getElementById(id).textContent = squares[squareCount].name;
                     squareCount = squareCount + 1;
                 }
+            }
+            if (squares.length >= 100){
+                document.getElementById('purchaseSquaresBtn').style.display = 'none';
             }
             localStorage.setItem('superBowlGrid', document.getElementById('gridContainer').innerHTML);
         }
@@ -332,7 +340,7 @@
                     for (let col = 1; col < 12; col++) {
                         const cell = document.createElement('div');
                         cell.id = `col-${col}-row-${row}`;
-                        console.log(cell.id);
+
                         grid.appendChild(cell);
                     }
                 }
@@ -363,52 +371,6 @@
 
         function saveSuperBowlGrid() {
             localStorage.setItem('superBowlGrid', document.getElementById('gridContainer').innerHTML);
-        }
-
-
-        function renderGridFromData(gridData) {
-            const gridContainer = document.getElementById('gridContainer');
-            gridContainer.innerHTML = '';
-            const grid = document.createElement('div');
-            grid.classList.add('grid');
-
-            // Create header row
-            for (let i = 0; i < 11; i++) {
-                const cell = document.createElement('div');
-                if (i === 0) {
-                    cell.textContent = ' ';
-                } else {
-                    cell.textContent = Object.values(gridData['a'])[i];
-                    cell.classList.add('away-team', 'away-header');
-                }
-                grid.appendChild(cell);
-            }
-
-            // Create remaining rows
-            for (let i = 0; i < 10; i++) {
-                const row = String.fromCharCode(97 + i); // 'a' to 'j'
-                for (let j = 0; j < 11; j++) {
-                    const cell = document.createElement('div');
-                    cell.id = `${row}${j}`;
-                    if (j === 0) {
-                        cell.classList.add('home-header', 'home-team');
-                        cell.textContent = Object.keys(gridData)[i];
-                    } else {
-                        cell.textContent = gridData[row][j + 1];
-                        if (row === 'a' && j === 1) {
-                            cell.classList.add('neutral');
-                        } else if (row === 'a') {
-                            cell.classList.add('home-team');
-                        } else if (j === 1) {
-                            cell.classList.add('away-team');
-                        }
-                        cell.id = `${row}.${j}`;
-                    }
-                    grid.appendChild(cell);
-                }
-            }
-
-            gridContainer.appendChild(grid);
         }
     </script>
 
